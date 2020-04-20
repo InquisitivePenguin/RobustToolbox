@@ -106,7 +106,6 @@ namespace Robust.Server.GameObjects
 
         private void HandleEntityNetworkMessage(MsgEntity message)
         {
-            message.SourceTick += 60;
             var msgT = message.SourceTick;
             var cT = _gameTiming.CurTick;
             Logger.Info($"{msgT}, {cT}");
