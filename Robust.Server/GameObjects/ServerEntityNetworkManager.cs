@@ -106,6 +106,7 @@ namespace Robust.Server.GameObjects
 
         private void HandleEntityNetworkMessage(MsgEntity message)
         {
+            message.SourceTick += 60;
             var msgT = message.SourceTick;
             var cT = _gameTiming.CurTick;
             Logger.Info($"{msgT}, {cT}");
@@ -126,6 +127,11 @@ namespace Robust.Server.GameObjects
 
         private void DispatchEntityNetworkMessage(MsgEntity message)
         {
+            // Don't attempt to retrieve player session if the client has been disconnected
+            if (!message.MsgChannel.NetPeer.IsConnected)
+            {
+                return;
+            }
             var player = _playerManager.GetSessionByChannel(message.MsgChannel);
 
             if (message.Sequence != 0)
